@@ -1,31 +1,33 @@
-from fastapi import Request, FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from .custom_exceptions import (
-    PersonNotFoundException,
-    EmptyTreeException,
-    LocationNotFoundException,
-    TypeDocNotFoundException,
-    InvalidCSVFormatException
-)
-
+from .custom_exceptions import NotFoundException, BadRequestException, InternalServerException
 
 def register_exception_handlers(app: FastAPI):
-    @app.exception_handler(PersonNotFoundException)
-    async def person_not_found_exception_handler(request: Request, exc: PersonNotFoundException):
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    @app.exception_handler(NotFoundException)
+    async def not_found_exception_handler(request: Request, exc: NotFoundException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"error": exc.detail},
+        )
 
-    @app.exception_handler(EmptyTreeException)
-    async def empty_tree_exception_handler(request: Request, exc: EmptyTreeException):
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    @app.exception_handler(BadRequestException)
+    async def bad_request_exception_handler(request: Request, exc: BadRequestException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"error": exc.detail},
+        )
 
-    @app.exception_handler(LocationNotFoundException)
-    async def location_not_found_exception_handler(request: Request, exc: LocationNotFoundException):
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    @app.exception_handler(InternalServerException)
+    async def internal_server_exception_handler(request: Request, exc: InternalServerException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"error": exc.detail},
+        )
 
-    @app.exception_handler(TypeDocNotFoundException)
-    async def typedoc_not_found_exception_handler(request: Request, exc: TypeDocNotFoundException):
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
-
-    @app.exception_handler(InvalidCSVFormatException)
-    async def invalid_csv_format_exception_handler(request: Request, exc: InvalidCSVFormatException):
-        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+    @app.exception_handler(Exception)
+    async def general_exception_handler(request: Request, exc: Exception):
+        # Fallback for all other unhandled exceptions
+        return JSONResponse(
+            status_code=500,
+            content={"error": "An unexpected error occurred"},
+        )
