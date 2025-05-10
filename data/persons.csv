@@ -1,1 +1,4 @@
-id;typedoc_code;document;first_name;last_name;gender;birth_date;location_code
+id,name,lastname,age,gender,typedoc_code,typedoc_description,location_code,location_description
+1,Juan,Pérez,30,M,5,ANTIOQUIA,5001,MEDELLÍN
+2,María,López,25,F,5,ANTIOQUIA,5001,MEDELLÍN
+3,Camila,Rodríguez,28,F,5,ANTIOQUIA,5001,MEDELLÍN
