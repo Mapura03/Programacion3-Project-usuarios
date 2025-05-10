@@ -20,10 +20,10 @@ app = FastAPI(title="Person Management API", version="1.0.0")
 location_service = LocationService(csv_path="CSV/DIVIPOLA.csv")
 set_location_service(location_service)
 
-person_service = PersonService()
+person_service = PersonService(csv_path="data/persons.csv")
 set_person_service(person_service)
 
-typedoc_service = TypedocService(csv_path="CSV/TYPEDOC.csv")
+typedoc_service = TypedocService(csv_path="CSV/DIVIPOLA.csv")
 set_typedoc_service(typedoc_service)
 
 # Incluir routers
