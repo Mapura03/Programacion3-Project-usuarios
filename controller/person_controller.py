@@ -3,38 +3,34 @@ from model.person import Person
 from service.person_service import PersonService, get_person_service
 from typing import List
 
-router = APIRouter()
+person_router = APIRouter()
 
-@router.post("/persons", response_model=Person, status_code=status.HTTP_201_CREATED)
+@person_router.post("/persons", response_model=Person, status_code=status.HTTP_201_CREATED)
 def create_person(person: Person, service: PersonService = Depends(get_person_service)) -> Person:
-    created_person = service.create_person(person)
-    if not created_person:
+    success = service.create_person(person)
+    if not success:
         raise HTTPException(status_code=400, detail="Person could not be created.")
-    return created_person
+    return person
 
-
-@router.get("/persons", response_model=List[Person])
+@person_router.get("/persons", response_model=List[Person])
 def list_persons(service: PersonService = Depends(get_person_service)) -> List[Person]:
-    return service.get_persons()
+    return service.get_all_persons()
 
-
-@router.get("/persons/{person_id}", response_model=Person)
+@person_router.get("/persons/{person_id}", response_model=Person)
 def get_person(person_id: str, service: PersonService = Depends(get_person_service)) -> Person:
     person = service.get_person_by_id(person_id)
     if not person:
         raise HTTPException(status_code=404, detail="Person not found.")
     return person
 
-
-@router.put("/persons/{person_id}", response_model=Person)
+@person_router.put("/persons/{person_id}", response_model=Person)
 def update_person(person_id: str, updated_person: Person, service: PersonService = Depends(get_person_service)) -> Person:
-    person = service.update_person(person_id, updated_person)
-    if not person:
+    success = service.update_person(person_id, updated_person)
+    if not success:
         raise HTTPException(status_code=404, detail="Person not found.")
-    return person
+    return updated_person
 
-
-@router.delete("/persons/{person_id}", status_code=status.HTTP_204_NO_CONTENT)
+@person_router.delete("/persons/{person_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_person(person_id: str, service: PersonService = Depends(get_person_service)) -> None:
     if not service.delete_person(person_id):
         raise HTTPException(status_code=404, detail="Person not found.")

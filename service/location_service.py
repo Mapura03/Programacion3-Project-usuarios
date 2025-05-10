@@ -1,7 +1,22 @@
 from model.location import Location
 import pandas as pd
-from typing import List
+from typing import List, Optional
 
+# -------------------------------
+# Instancia global del servicio
+# -------------------------------
+location_service_instance = None
+
+def set_location_service(service):
+    global location_service_instance
+    location_service_instance = service
+
+def get_location_service():
+    return location_service_instance
+
+# -------------------------------
+# Servicio de Location
+# -------------------------------
 class LocationService:
     def __init__(self, csv_path: str):
         self.locations_df = pd.read_csv(csv_path, encoding='latin1', sep=';')
@@ -26,7 +41,7 @@ class LocationService:
             for _, row in filtered.iterrows()
         ]
 
-    def get_location_by_code(self, location_code: int) -> Location:
+    def get_location_by_code(self, location_code: int) -> Optional[Location]:
         match = self.locations_df[self.locations_df["Código Municipio"] == location_code]
         if not match.empty:
             row = match.iloc[0]

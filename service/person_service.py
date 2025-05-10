@@ -2,6 +2,21 @@ from model.person import Person
 from model.tree import TreeN
 from typing import List, Optional
 
+# ----------------------------
+# Instancia global del servicio
+# ----------------------------
+person_service_instance = None
+
+def set_person_service(service):
+    global person_service_instance
+    person_service_instance = service
+
+def get_person_service():
+    return person_service_instance
+
+# ----------------------------
+# Servicio de Personas
+# ----------------------------
 class PersonService:
     def __init__(self):
         self.tree = TreeN()
