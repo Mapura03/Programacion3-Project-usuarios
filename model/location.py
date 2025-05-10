@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from .parameter import Parameter
 
-class Location(BaseModel):
-    code: int
-    description: str
+class Location(Parameter):
+    # Inherits code and description from Parameter
+    pass

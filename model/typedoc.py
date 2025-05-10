@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from .parameter import Parameter
 
-class Typedoc(BaseModel):
-    code: int
-    description: str
+class Typedoc(Parameter):
+    # Inherits code and description from Parameter
+    pass
